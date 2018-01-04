@@ -18,12 +18,13 @@ public interface RetrofitApiInterface {
     @POST("/quizapp/studentdetail.php")
     public Call<Student> getStudenInfo(@Field("username") String username, @Field("password") Long password, @Field("api_key") String apiKey);
     @FormUrlEncoded
-    @POST("/quizapp/studentdetail.php")
-    public Call<Student> getSomeDetails(@Field("user_id") Long userId, @Field("api_key") String apiKey);
+    @POST("/sl_app/user-init.php")
+        public Call<Student> getSomeDetails(@Field("email") String userId, @Field("api_key") String apiKey);
 
     @FormUrlEncoded
     @POST
     public Call<String>  getStringResponse(@Field("email") String x);
+
 
 
 

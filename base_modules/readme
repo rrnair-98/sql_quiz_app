@@ -1,0 +1,1 @@
+All packages in this pkg are the main modules of this app. They are directly dependent on the services offered by the core_services package.

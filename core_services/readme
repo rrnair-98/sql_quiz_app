@@ -1,0 +1,4 @@
+This package includes classes that are going to be used frequently by the base_modules.
+networking - Contains Retrofit Classes and Reverberator [the callback to be implemented ]
+utils - Utility classes and functions such as ImageFetcher, SharedPreferenceHandler, Modal classes required by RetrofitApiClient
+views - Packages mcqView and mtfView . Will add fibView later.

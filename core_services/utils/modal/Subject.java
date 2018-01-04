@@ -98,4 +98,20 @@ public class Subject {
     public long getSubjectSemesterId() {
         return mSubjectSemesterId;
     }
+
+
+
+    /*
+    * @author -rohan
+    * so that this can be made a json and parsed easily
+    * */
+    @Override
+    public String toString(){
+        StringBuilder stringBuilder=new StringBuilder();
+        stringBuilder.append(this.mSubjectName);
+        stringBuilder.append(":");
+        stringBuilder.append(this.mChapters.toString());
+
+        return stringBuilder.toString();
+    }
 }

@@ -53,4 +53,10 @@ public class Branch {
     public void setBranchName(String branchName) {
         mBranchName = branchName;
     }
+
+
+    @Override
+    public String toString(){
+        return this.mBranchName;
+    }
 }

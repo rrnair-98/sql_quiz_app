@@ -62,6 +62,8 @@ public class RetrofitApiClient {
             @Override
             public void onResponse(Call call, Response response) {
                 if(reverberator!=null) {
+                    if(response!=null)
+                        Log.d(TAG,response.toString());
                     reverberator.reverb(response.body());
                 }
             }
@@ -93,12 +95,12 @@ public class RetrofitApiClient {
 
     /* @params id - id of the user information to be fetched.
     * @param reverberator- callback which returns data fetched from the server is null if it fails.*/
-    public void getUserDetailsWithId(Long id,Reverberator reverberator){
+    public void getUserDetails(String email,Reverberator reverberator){
         if(this.dataHolder.getStudent()!=null){
             reverberator.reverb(this.dataHolder.getStudent());
             return;
         }
-        Call<Student> studentCall=this.mRetrofitApiInterface.getSomeDetails(id,API_KEY);
+        Call<Student> studentCall=this.mRetrofitApiInterface.getSomeDetails(email,API_KEY);
         this.enque(studentCall,reverberator);
     }
 
@@ -107,6 +109,7 @@ public class RetrofitApiClient {
     public void setStudentRef(Student studentRef){
         this.dataHolder.setStudent(studentRef);
     }
+
 
 
 

@@ -2,11 +2,19 @@ package com.creeps.sl_app.quizapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.creeps.sl_app.quizapp.base_modules.FragmentController;
+import com.creeps.sl_app.quizapp.base_modules.user.LoginHandler;
+import com.creeps.sl_app.quizapp.base_modules.user.UserFragment;
+import com.creeps.sl_app.quizapp.core_services.networking.RetrofitApiClient;
 import com.creeps.sl_app.quizapp.core_services.utils.SharedPreferenceHandler;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -26,59 +34,51 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 
 
-public class MainActivity extends AppCompatActivity
-    {
+public class MainActivity extends AppCompatActivity implements LoginHandler{
         private static final int RC_SIGN_IN=123;//constant for result code for startActivityForResult in firebase UI
         private FirebaseAuth mAuth;
         private FirebaseAuth.AuthStateListener mAuthListener;
         private GoogleApiClient mGoogleApiClient;
-        /*
-        * If the mIsNew is false it means the user is already signed
-        * It is by default false and set to true only if the user != null yields false in mAuthListener*/
-        private boolean mIsNew = false;//flag to see if the user is new or not
+        private final static String TAG="MainActivity";
+        private final static String EMAIL="email";
+
+
+        private BottomNavigationView bottomNavigationView;
+        private FragmentController mFragmentController;
 
         @Override
-        protected void onCreate(Bundle savedInstanceState)
-        {
+        protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            Log.d(TAG,"ehherera");
+
             setContentView(R.layout.activity_main);
+            Log.d(TAG,"ehherera");
+            UserFragment.setLoginHandler(this);
+
+            bottomNavigationView=(BottomNavigationView)findViewById(R.id.bottomNavigation);
+
+            mFragmentController=FragmentController.getInstance(this,this.getSupportFragmentManager());
+
+            bottomNavigationView.setOnNavigationItemSelectedListener(mFragmentController);
+            bottomNavigationView.setOnNavigationItemReselectedListener(mFragmentController);
+            bottomNavigationView.setSelectedItemId(R.id.action_blog);
+            mFragmentController.onNavigationItemSelected(bottomNavigationView.getMenu().findItem(R.id.action_blog));
+
             initAuth();
+            this.initAuthListener();
+
 
         }
 
-        private void initAuth(){
+        public void initAuth(){
 
+            Log.d(TAG,"init");
             mAuth = FirebaseAuth.getInstance();
-            mAuth.signOut();
-            mAuthListener = new FirebaseAuth.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                    FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                    if (user != null) {
-                        // User is signed in
-                        //Log.d("LoginActivity", "onAuthStateChanged:signed_in:" + user.getUid());
-                        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                        showToast("signed in as "+email);
-
-                        if(mIsNew){
-                        /*DataCommunicator.getInstance(getApplicationContext()).register(email);*/
-                            showToast("IsNEw true");
-                        }
-
-                        SharedPreferenceHandler preferenceHandler = SharedPreferenceHandler.getInstance(MainActivity.this);
-                        preferenceHandler.add("email",email);
-                        startActivity(HelloWorldActivity.newIntent(MainActivity.this));
-                        finish();
-                    } else {
-                        // User is signed out
-                        //Log.d("LoginActivity", "onAuthStateChanged:signed_out");
-                        mIsNew = true;
-                        showToast("access denied");
-                        signIn();
-                    }
-                }
-            };
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
             GoogleApiClient.OnConnectionFailedListener connectionFailedListener = new GoogleApiClient.OnConnectionFailedListener() {
                 @Override
                 public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -89,21 +89,51 @@ public class MainActivity extends AppCompatActivity
                 }
 
             };
-            // Configure Google Sign In
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build();
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .enableAutoManage(MainActivity.this /* FragmentActivity */, connectionFailedListener /* OnConnectionFailedListener */)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
 
+
+            //mAuth.signOut();
+
+            // Configure Google Sign In
+
+
+        }
+
+        private void initAuthListener(){
+            Log.d(TAG,"authListenerinited");
+            mAuth = FirebaseAuth.getInstance();
+            mAuthListener = mAuthListener==null?new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                    if (user != null) {
+                        // User is signed in
+                        Log.d("LoginActivity", "onAuthStateChanged:signed_in:" + user.getUid());
+                        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                        showToast("signed in as "+email);
+
+                        SharedPreferenceHandler.getInstance(MainActivity.this).add(MainActivity.EMAIL,email);
+                        //startActivity(HelloWorldActivity.newIntent(MainActivity.this));
+
+                    } else {
+                        // User is signed out
+                        Log.d("LoginActivity", "onAuthStateChanged:signed_out");
+                        SharedPreferenceHandler.getInstance(MainActivity.this).remove(MainActivity.EMAIL);
+                        showToast("access denied");
+                        signIn();
+                    }
+                }
+            }:mAuthListener;
+            mAuth.addAuthStateListener(mAuthListener);
         }
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
-
+            Log.d(TAG,"activity result");
             // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
             if (requestCode == RC_SIGN_IN) {
                 GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -112,6 +142,9 @@ public class MainActivity extends AppCompatActivity
                     showToast("bhai bhai bhai");
                     GoogleSignInAccount account = result.getSignInAccount();
                     firebaseAuthWithGoogle(account);
+                    SharedPreferenceHandler.getInstance(MainActivity.this).add(MainActivity.EMAIL,account.getEmail());
+
+
                     //startActivity(FeedPagerActivity.newIntent(MainActivity.this));
                     //IpClass.getInstance().setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
                 } else {
@@ -120,21 +153,20 @@ public class MainActivity extends AppCompatActivity
                     Log.i("REQ-CODE",new String(String.valueOf(resultCode)));
                     //updateUI(null);
 
+
                 }
+                //forcing repaint
+
+                FragmentController.getInstance(this,getSupportFragmentManager()).onNavigationItemSelected(bottomNavigationView.getMenu().findItem(R.id.action_user));
+
             }
         }
         private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
             Log.d("LoginActivity", "firebaseAuthWithGoogle:" + acct.getId());
 
-            try {
 
 
-            } catch (Exception e) {
-
-            }
-
-
-            AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+            AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(),null);
             mAuth.signInWithCredential(credential)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -150,26 +182,19 @@ public class MainActivity extends AppCompatActivity
                             }
 
 
-                            try {
-
-
-                            } catch (Exception e) {
-
-                            }
-
                         }
                     });
         }
-        private void signIn() {
+        public void signIn() {
             Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
             startActivityForResult(signInIntent, RC_SIGN_IN);
         }
 
-        private void signOut() {
+        public void signOut() {
             // Firebase sign out
             try {
                 mAuth.signOut();
-
+                SharedPreferenceHandler.getInstance(this).remove(MainActivity.EMAIL);
                 // Google sign out
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                         new ResultCallback<Status>() {
@@ -179,15 +204,22 @@ public class MainActivity extends AppCompatActivity
                             }
                         });
             } catch (Exception e) {
-
+                    e.printStackTrace();
             }
         }
 
 
-        @Override
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
+
+    @Override
         public void onStart() {
             super.onStart();
-            mAuth.addAuthStateListener(mAuthListener);
+            Log.d(TAG,"onstart");
+
         }
 
         @Override
@@ -203,5 +235,13 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
         }
 
+        public void toast(String x){
+            Toast.makeText(MainActivity.this.getApplicationContext(),x,Toast.LENGTH_SHORT).show();
+        }
 
-    }
+
+
+
+
+
+}

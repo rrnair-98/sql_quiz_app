@@ -40,5 +40,17 @@ public class SharedPreferenceHandler {
 
 
 
+    public void remove(String key){
+        SharedPreferences.Editor editor=this.sharedPreferences.edit();
+        editor.remove(key);
+        editor.apply();
+    }
+
+    public interface SharedPreferenceHandlerConstants{
+        /* base details to be used as keys for sharedPreferences... */
+        public final static String USER_NAME="name",USER_EMAIL="email",USER_SUBJECT="subject",USER_BRANCH="branch",USER_CHAPTERS="chapters";
+
+    }
+
 
 }

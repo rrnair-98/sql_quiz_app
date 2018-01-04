@@ -78,4 +78,12 @@ public class Chapter {
     public void setChapterWeightage(double chapterWeightage) {
         mChapterWeightage = chapterWeightage;
     }
+
+
+    /* @author rohan
+    * */
+    @Override
+    public String toString(){
+        return this.mChapterId+" "+this.getChapterName();
+    }
 }
