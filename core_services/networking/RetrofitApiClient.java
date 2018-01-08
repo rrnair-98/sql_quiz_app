@@ -4,14 +4,19 @@ import android.content.Context;
 import android.util.Log;
 
 import com.creeps.sl_app.quizapp.R;
+import com.creeps.sl_app.quizapp.core_services.utils.modal.Chapter;
 import com.creeps.sl_app.quizapp.core_services.utils.modal.DataHolder;
 import com.creeps.sl_app.quizapp.core_services.utils.modal.Student;
+import com.creeps.sl_app.quizapp.core_services.utils.modal.Test;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by rohan on 30/9/17.
@@ -27,8 +32,8 @@ public class RetrofitApiClient {
     private static RetrofitApiClient mRetrofitApiClient;
     private Context mContext;
     private final String BASE_URL;
-    private final Retrofit mRetrofitInstance;
-    private final RetrofitApiInterface mRetrofitApiInterface;
+    private final Retrofit mRetrofitInstance,mRetrofitScalarInstance;
+    private final RetrofitApiInterface mRetrofitApiInterface,mRetrofitApiScalarInterface;
     private final static String TAG="RetrofitApiClient";
     private DataHolder dataHolder;
 
@@ -45,6 +50,8 @@ public class RetrofitApiClient {
         this.mRetrofitApiInterface= this.mRetrofitInstance.create(RetrofitApiInterface.class);
         this.dataHolder=DataHolder.getInstance(context);
 
+        this.mRetrofitScalarInstance=new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(ScalarsConverterFactory.create()).build();
+        this.mRetrofitApiScalarInterface=this.mRetrofitScalarInstance.create(RetrofitApiInterface.class);
     }
     /* use this factory method to obtain an instance of the class*/
     public static RetrofitApiClient getInstance(Context context){
@@ -112,7 +119,12 @@ public class RetrofitApiClient {
 
 
 
+    public void initiateTest(String user_id, List<Chapter> chapters, long duration, int marks, Reverberator reverberator){
+        Log.d(TAG,"initiatingTest");
+        Call<Test> testCall=this.mRetrofitApiInterface.initateTest(user_id,chapters,marks,duration);
+        this.enque(testCall,reverberator);
 
+    }
 
 
 

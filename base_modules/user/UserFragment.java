@@ -115,6 +115,7 @@ public class UserFragment extends Fragment implements Reverberator,SharedPrefere
             Log.d(TAG,"reverb");
             Student st=(Student)obj;
             this.setData(st);
+            s.add(USER_ID,st.getStudentId()+"");
             s.add(USER_NAME, st.getStudentName());
             s.add(USER_EMAIL, st.getStudentEmail());
             s.add(USER_BRANCH, new Gson().toJson(st.getStudentBranch()));

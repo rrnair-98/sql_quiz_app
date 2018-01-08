@@ -3,18 +3,13 @@ package com.creeps.sl_app.quizapp;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.MenuItemImpl;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.creeps.sl_app.quizapp.base_modules.FragmentController;
 import com.creeps.sl_app.quizapp.base_modules.user.LoginHandler;
 import com.creeps.sl_app.quizapp.base_modules.user.UserFragment;
-import com.creeps.sl_app.quizapp.core_services.networking.RetrofitApiClient;
 import com.creeps.sl_app.quizapp.core_services.utils.SharedPreferenceHandler;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -46,12 +41,16 @@ public class MainActivity extends AppCompatActivity implements LoginHandler{
         private BottomNavigationView bottomNavigationView;
         private FragmentController mFragmentController;
 
+
+        public static int DISPLAY_WIDTH;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             Log.d(TAG,"ehherera");
 
             setContentView(R.layout.activity_main);
+
+
             Log.d(TAG,"ehherera");
             UserFragment.setLoginHandler(this);
 

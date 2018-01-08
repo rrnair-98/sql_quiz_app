@@ -11,6 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import com.creeps.sl_app.quizapp.core_services.utils.ImageFetcher;
 import com.creeps.sl_app.quizapp.core_services.utils.PostExecuteCallback;
+import com.creeps.sl_app.quizapp.core_services.utils.modal.Option;
+
+import java.util.List;
 
 import static android.widget.RelativeLayout.BELOW;
 
@@ -41,18 +44,20 @@ public class McqView extends ScrollView {
 
 
 
-    public void initView(String optionText[],String optionURLs[]){
+    public void initView(List<Option> options){
         this.mScrollingHost.removeAllViews();
-        McqItem m=new McqItem(optionText!=null?optionText[0]:null,optionURLs!=null?optionURLs[0]:null);
+        McqItem m=new McqItem(options.get(0).getOptionsText()!=null?options.get(0).getOptionsText():null,options.get(0).getOptionsUrl()!=null?options.get(0).getOptionsUrl():null);
         RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         m.setLayoutParams(layoutParams);
         this.mScrollingHost.addView(m);
         McqItem previous=m;
 
 
-
-        for(int i=1;i<optionText.length;i++){
-            m=new McqItem(optionText!=null?optionText[i]:null,optionURLs!=null?optionURLs[i]:null);
+        String optionText,optionURLs;
+        for(int i=1;i<options.size();i++){
+            optionText=options.get(i).getOptionsText();
+            optionURLs=options.get(i).getOptionsUrl();
+            m=new McqItem(optionText!=null?optionText:null,optionURLs!=null?optionURLs:null);
             layoutParams=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.addRule(BELOW,previous.getId());
             m.setLayoutParams(layoutParams);
@@ -64,7 +69,7 @@ public class McqView extends ScrollView {
             Log.d(TAG,this.mScrollingHost.getChildAt(i).toString());
 
         }
-        numChildren=optionText.length;
+        numChildren=options.size();
 
 
         this.addView(this.mScrollingHost);

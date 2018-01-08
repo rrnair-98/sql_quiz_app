@@ -1,5 +1,6 @@
 package com.creeps.sl_app.quizapp.base_modules.test;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,12 +14,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.creeps.sl_app.quizapp.TestActivity;
+import com.creeps.sl_app.quizapp.core_services.utils.modal.Chapter;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import com.creeps.sl_app.quizapp.R;
 import com.creeps.sl_app.quizapp.core_services.utils.SharedPreferenceHandler;
 import com.creeps.sl_app.quizapp.core_services.utils.modal.Subject;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,18 +89,20 @@ public class TestFragment extends Fragment implements SharedPreferenceHandler.Sh
             @Override
             public void onClick(View v) {
                 boolean []itemStates=TestFragment.this.mAdapter.getItemStates();
+                List<Chapter> chapters=new ArrayList<Chapter>();
                 for (int i=0;i<itemStates.length;i++){
                     if(itemStates[i]){
                         /* TODO make a json string requesting test ie make a call to the RetrofitApiClient*/
                         Log.d(TAG,TestFragment.this.mCurrentSubject.getChapters().get(i).toString());
-
-
-
+                        chapters.add(TestFragment.this.mCurrentSubject.getChapters().get(i));
                     }
                 }
 
 
                 /* TODO initiate a fragmentTransaction / Activity that has ViewController which will conduct the Test*/
+                Intent intent=TestActivity.getIntent(TestFragment.this.getContext(),chapters);
+                startActivity(intent);
+
             }
         });
     }
@@ -113,6 +120,9 @@ public class TestFragment extends Fragment implements SharedPreferenceHandler.Sh
         Log.d(TAG,this.mSubjects.toString());
 
     }
+
+
+
 
 
 
