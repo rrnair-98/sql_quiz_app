@@ -8,6 +8,7 @@ import com.creeps.sl_app.quizapp.core_services.views.mtf.listeners.DropListener;
 import com.creeps.sl_app.quizapp.core_services.views.mtf.listeners.LongPressListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by damian on 23/9/17.
@@ -36,6 +37,10 @@ public abstract class MtfAdapter extends RecyclerView.Adapter<MtfAdapter.MtfView
     }
 
 
+
+    public ArrayList getList(){
+        return this.mainData;
+    }
 
 
     final public void removeItem(int pos){

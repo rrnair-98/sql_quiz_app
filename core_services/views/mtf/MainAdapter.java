@@ -35,9 +35,6 @@ public class MainAdapter extends MtfAdapter {
         this.arrayList=data;
         this.isDroppable=isDroppable;
     }
-
-
-
     @Override
     public MainAdapter.TempViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=(View)this.inflater.inflate(this.layoutid,parent,false);

@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import com.creeps.sl_app.quizapp.R;
 import com.creeps.sl_app.quizapp.base_modules.blog.BlogFragment;
 import com.creeps.sl_app.quizapp.base_modules.settings.SettingsFragment;
-import com.creeps.sl_app.quizapp.base_modules.test.TestFragment;
+import com.creeps.sl_app.quizapp.base_modules.test.TestChapterFragment;
 import com.creeps.sl_app.quizapp.base_modules.user.UserFragment;
 
 /**
@@ -62,7 +62,7 @@ public class FragmentController implements BottomNavigationView.OnNavigationItem
                 mNewFragment=new SettingsFragment();
                 break;
             case R.id.action_test:
-                mNewFragment=new TestFragment();
+                mNewFragment=new TestChapterFragment();
                 break;
             case R.id.action_blog:
                 mNewFragment=new BlogFragment();

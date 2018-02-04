@@ -12,22 +12,29 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import com.creeps.sl_app.quizapp.R;
+import com.creeps.sl_app.quizapp.core_services.utils.modal.Option;
+import com.creeps.sl_app.quizapp.core_services.utils.modal.QuestionStmt;
 
 /**
  * Created by rohan on 1/10/17.
  */
 
 public class BottomBarAdapter extends RecyclerView.Adapter<BottomBarAdapter.BottomBarViewHolder> {
-    private ArrayList<DataPairs> arrayList;
+    private ArrayList<DataPairs<QuestionStmt,Option>> arrayList;
     private LayoutInflater layoutInflater;
     private BottomBarCallback mBottomBarCallback;/* for the class within which its being placed*/
     private final static String TAG="BottomBarAdapter";
-    public BottomBarAdapter(Context context, ArrayList<DataPairs> dataPairses,BottomBarCallback bottomBarCallback){
+    public BottomBarAdapter(Context context, ArrayList<DataPairs<QuestionStmt,Option>> dataPairses,BottomBarCallback bottomBarCallback){
         this.layoutInflater=LayoutInflater.from(context);
         this.arrayList=dataPairses;
         this.mBottomBarCallback=bottomBarCallback;
     }
 
+
+    public void reset(){
+        this.arrayList.clear();
+        this.notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount(){
@@ -83,10 +90,6 @@ public class BottomBarAdapter extends RecyclerView.Adapter<BottomBarAdapter.Bott
                 }
             });
         }
-
-
-
-
     }
 
 

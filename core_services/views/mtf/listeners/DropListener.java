@@ -97,8 +97,6 @@ public class DropListener implements View.OnDragListener {
     @Override
     public void finalize()throws Throwable{
         super.finalize();
-
-
     }
 
     private void log(String x){

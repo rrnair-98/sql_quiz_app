@@ -7,7 +7,7 @@ public class QuestionStmt {
 
     @SerializedName("sub_id")
     @Expose
-    private String subId;
+    private Integer subId;
     @SerializedName("text")
     @Expose
     private String text;
@@ -15,11 +15,11 @@ public class QuestionStmt {
     @Expose
     private String textImage;
 
-    public String getSubId() {
+    public int getSubId() {
         return subId;
     }
 
-    public void setSubId(String subId) {
+    public void setSubId(Integer subId) {
         this.subId = subId;
     }
 

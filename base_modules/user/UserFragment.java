@@ -124,7 +124,7 @@ public class UserFragment extends Fragment implements Reverberator,SharedPrefere
             Log.d(TAG,s.get(USER_SUBJECT));
         }else{
             //connection issues
-            mLoginHandler.toast(ERROR);
+            this.toast(ERROR);
             /*TODO use existing data
             Student st=new Student(1,s.get(USER_NAME));
             st.setStudentBranch(new Branch(1,s.get(USER_BRANCH)));
@@ -135,6 +135,9 @@ public class UserFragment extends Fragment implements Reverberator,SharedPrefere
         }
         Log.d(TAG,"about to toast");
 
+    }
+    private void toast(String x){
+        Toast.makeText(this.getContext(), x, Toast.LENGTH_SHORT).show();
     }
 }
 

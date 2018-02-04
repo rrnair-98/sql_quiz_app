@@ -33,10 +33,10 @@ import java.util.List;
  *
  */
 
-public class TestFragment extends Fragment implements SharedPreferenceHandler.SharedPreferenceHandlerConstants{
+public class TestChapterFragment extends Fragment implements SharedPreferenceHandler.SharedPreferenceHandlerConstants{
 
 
-    private final static String TAG="TestFragment";
+    private final static String TAG="TestChapterFragment";
     private List<Subject> mSubjects;
     private ListView mListView;
 
@@ -66,16 +66,16 @@ public class TestFragment extends Fragment implements SharedPreferenceHandler.Sh
         this.mSpinner.setAdapter(new ArrayAdapter<Subject>(this.getContext(),android.R.layout.simple_spinner_item,this.mSubjects));
         this.mListView=(ListView)view.findViewById(R.id.fragment_list_chapters);
 
-        this.mAdapter=new CustomChapterAdapter(TestFragment.this.getContext(),TestFragment.this.mSubjects.get(0).getChapters());
+        this.mAdapter=new CustomChapterAdapter(TestChapterFragment.this.getContext(),TestChapterFragment.this.mSubjects.get(0).getChapters());
         this.mListView.setAdapter(this.mAdapter);
 
-        Log.d(TAG,TestFragment.this.mSubjects.get(0).getChapters().toString());
+        Log.d(TAG,TestChapterFragment.this.mSubjects.get(0).getChapters().toString());
 
         this.mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                TestFragment.this.mCurrentSubject=TestFragment.this.mSubjects.get(position);
-                TestFragment.this.mAdapter.setChapters(mCurrentSubject.getChapters());
+                TestChapterFragment.this.mCurrentSubject=TestChapterFragment.this.mSubjects.get(position);
+                TestChapterFragment.this.mAdapter.setChapters(mCurrentSubject.getChapters());
             }
 
             @Override
@@ -88,19 +88,19 @@ public class TestFragment extends Fragment implements SharedPreferenceHandler.Sh
         this.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean []itemStates=TestFragment.this.mAdapter.getItemStates();
+                boolean []itemStates=TestChapterFragment.this.mAdapter.getItemStates();
                 List<Chapter> chapters=new ArrayList<Chapter>();
                 for (int i=0;i<itemStates.length;i++){
                     if(itemStates[i]){
                         /* TODO make a json string requesting test ie make a call to the RetrofitApiClient*/
-                        Log.d(TAG,TestFragment.this.mCurrentSubject.getChapters().get(i).toString());
-                        chapters.add(TestFragment.this.mCurrentSubject.getChapters().get(i));
+                        Log.d(TAG,TestChapterFragment.this.mCurrentSubject.getChapters().get(i).toString());
+                        chapters.add(TestChapterFragment.this.mCurrentSubject.getChapters().get(i));
                     }
                 }
 
 
                 /* TODO initiate a fragmentTransaction / Activity that has ViewController which will conduct the Test*/
-                Intent intent=TestActivity.getIntent(TestFragment.this.getContext(),chapters);
+                Intent intent=TestActivity.getIntent(TestChapterFragment.this.getContext(),chapters);
                 startActivity(intent);
 
             }

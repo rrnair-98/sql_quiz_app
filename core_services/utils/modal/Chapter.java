@@ -84,6 +84,6 @@ public class Chapter {
     * */
     @Override
     public String toString(){
-        return this.mChapterId+" "+this.getChapterName();
+        return this.mChapterId+"";
     }
 }

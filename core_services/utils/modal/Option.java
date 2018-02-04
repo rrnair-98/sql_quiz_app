@@ -9,15 +9,9 @@ public class Option {
     @SerializedName("option_id")
     @Expose
     private Integer optionId;
-    @SerializedName("options_url")
+    @SerializedName("option_statement")
     @Expose
-    private String optionsUrl;
-    @SerializedName("options_text")
-    @Expose
-    private String optionsText;
-    @SerializedName("sub_id")
-    @Expose
-    private String subId;
+    private OptionStatement optionStatement;
 
     public Integer getOptionId() {
         return optionId;
@@ -27,28 +21,12 @@ public class Option {
         this.optionId = optionId;
     }
 
-    public String getOptionsUrl() {
-        return optionsUrl;
+    public OptionStatement getOptionStatement() {
+        return optionStatement;
     }
 
-    public void setOptionsUrl(String optionsUrl) {
-        this.optionsUrl = optionsUrl;
-    }
-
-    public String getOptionsText() {
-        return optionsText;
-    }
-
-    public void setOptionsText(String optionsText) {
-        this.optionsText = optionsText;
-    }
-
-    public String getSubId() {
-        return subId;
-    }
-
-    public void setSubId(String subId) {
-        this.subId = subId;
+    public void setOptionStatement(OptionStatement optionStatement) {
+        this.optionStatement = optionStatement;
     }
 
 }
